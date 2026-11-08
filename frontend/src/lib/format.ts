@@ -58,11 +58,6 @@ export function formatLongDate(v: string | Date) {
   return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`
 }
 
-/** "1 января 2027, 14:05" in the device timezone. */
-export function formatLongDateTime(d: Date) {
-  return `${formatLongDate(d)}, ${pad(d.getHours())}:${pad(d.getMinutes())}`
-}
-
 /** Parse dd.mm.yyyy into YYYY-MM-DD; null if incomplete or not a real date. */
 export function parseRuDate(s: string): string | null {
   const m = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(s)

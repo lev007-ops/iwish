@@ -17,7 +17,7 @@ from ..config import settings
 from ..db import get_db
 from ..holidays import next_occurrence
 from ..images import MAX_UPLOAD_BYTES, BadImage, delete_upload, exists, save_upload, thumb_name
-from ..models import Device, Gift, Guest, Holiday, Like, gift_holidays
+from ..models import Gift, Guest, Holiday, Like, gift_holidays
 from ..schemas import (
     GiftAdminOut,
     GiftIn,
@@ -217,28 +217,10 @@ async def upload_photo(file: UploadFile = File(...)):
 
 
 def _guest_rows(db: Session, guest_id: str | None = None) -> list[GuestOut]:
-    stats = (
-        select(
-            Device.guest_id,
-            func.count(Device.id).label("n"),
-            func.max(Device.last_seen_at).label("last"),
-        )
-        .group_by(Device.guest_id)
-        .subquery()
-    )
-    q = (
-        select(Guest, stats.c.n, stats.c.last)
-        .outerjoin(stats, stats.c.guest_id == Guest.id)
-        .order_by(Guest.created_at.desc())
-    )
+    q = select(Guest).order_by(Guest.created_at.desc())
     if guest_id:
         q = q.where(Guest.id == guest_id)
-    return [
-        GuestOut(
-            id=g.id, name=g.name, created_at=g.created_at, device_count=n or 0, last_seen_at=last
-        )
-        for g, n, last in db.execute(q).all()
-    ]
+    return [GuestOut.model_validate(g, from_attributes=True) for g in db.scalars(q)]
 
 
 @protected.get("/guests", response_model=list[GuestOut])

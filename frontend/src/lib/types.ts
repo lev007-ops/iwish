@@ -85,8 +85,6 @@ export interface Guest {
   id: string
   name: string
   created_at: string
-  device_count: number
-  last_seen_at: string | null
 }
 
 export interface UploadResult {

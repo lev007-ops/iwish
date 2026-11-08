@@ -165,8 +165,6 @@ class GuestOut(BaseModel):
     id: str
     name: str
     created_at: dt.datetime
-    device_count: int
-    last_seen_at: dt.datetime | None
 
 
 # ---------- Misc ----------

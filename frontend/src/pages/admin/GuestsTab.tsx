@@ -4,7 +4,6 @@ import { Modal } from '../../components/Modal'
 import { Button, Empty, ErrorText, Field, IconButton, Input } from '../../components/ui'
 import { useConfirm } from '../../components/useConfirm'
 import { adminApi } from '../../lib/api'
-import { formatLongDateTime, plural } from '../../lib/format'
 import type { Guest } from '../../lib/types'
 import type { AdminData } from './AdminApp'
 import { QrModal } from './QrModal'
@@ -46,12 +45,6 @@ function RenameModal({ guest, onClose, onSaved }: { guest: Guest; onClose: () =>
       </form>
     </Modal>
   )
-}
-
-function formatSeen(s: string | null) {
-  if (!s) return 'ещё не открывали'
-  const d = new Date(s.endsWith('Z') ? s : `${s}Z`)
-  return `был(а) ${formatLongDateTime(d)}`
 }
 
 export function GuestsTab({ guests, reload }: AdminData) {
@@ -134,11 +127,6 @@ export function GuestsTab({ guests, reload }: AdminData) {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="truncate font-semibold">{g.name}</div>
-                  <div className="text-xs text-muted">
-                    {g.device_count > 0
-                      ? `${g.device_count} ${plural(g.device_count, ['устройство', 'устройства', 'устройств'])} · ${formatSeen(g.last_seen_at)}`
-                      : formatSeen(null)}
-                  </div>
                 </div>
                 <IconButton label="Переименовать" onClick={() => setRenaming(g)}>
                   <PencilIcon size={16} />

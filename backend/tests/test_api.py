@@ -132,7 +132,7 @@ def test_personal_link_sets_cookie_and_greets(admin):
     admin.put(f"/api/admin/guests/{guest['id']}", json={"name": "Мария"})
     assert visitor.get("/api/public/state").json()["guest_name"] == "Мария"
     guests = admin.get("/api/admin/guests").json()
-    assert guests[0]["device_count"] == 1
+    assert "device_count" not in guests[0] and "last_seen_at" not in guests[0]
 
     # Unknown token: no cookie.
     v2 = TestClient(app)
