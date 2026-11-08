@@ -1,0 +1,354 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-ink: var(--c-ink);
+  --color-muted: var(--c-muted);
+  --color-line: var(--c-line);
+  --color-accent: var(--c-accent);
+  --color-accent-ink: var(--c-accent-ink);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-accent-2: var(--c-accent-2);
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: var(--f-display);
+}
+
+/* ---------- Base palette (no holiday theme / admin) ---------- */
+:root {
+  --f-display: 'Unbounded', var(--font-sans);
+  --c-bg: #f6f4fb;
+  --c-bg-art:
+    radial-gradient(60rem 40rem at 10% -10%, #e9ddff 0%, transparent 60%),
+    radial-gradient(50rem 40rem at 110% 10%, #ffe1f0 0%, transparent 55%);
+  --c-surface: rgb(255 255 255 / 0.82);
+  --c-surface-2: #f1edf9;
+  --c-ink: #1d1530;
+  --c-muted: #6b6480;
+  --c-line: rgb(29 21 48 / 0.1);
+  --c-accent: #7c3aed;
+  --c-accent-ink: #ffffff;
+  --c-accent-soft: rgb(124 58 237 / 0.12);
+  --c-accent-2: #ec4899;
+  color-scheme: light;
+}
+:root.dark {
+  --c-bg: #0f0c17;
+  --c-bg-art:
+    radial-gradient(60rem 40rem at 10% -10%, #2a1857 0%, transparent 60%),
+    radial-gradient(50rem 40rem at 110% 10%, #3b1230 0%, transparent 55%);
+  --c-surface: rgb(27 22 40 / 0.82);
+  --c-surface-2: #231d33;
+  --c-ink: #f2eefb;
+  --c-muted: #a49cba;
+  --c-line: rgb(242 238 251 / 0.1);
+  --c-accent: #a78bfa;
+  --c-accent-ink: #160b2e;
+  --c-accent-soft: rgb(167 139 250 / 0.16);
+  --c-accent-2: #f472b6;
+  color-scheme: dark;
+}
+
+/* ---------- Holiday themes ---------- */
+:root[data-holiday='new_year'] {
+  --f-display: 'Playfair Display', Georgia, serif;
+  --c-bg: #eaf2fb;
+  --c-bg-art:
+    radial-gradient(50rem 35rem at 0% 0%, #cfe3f7 0%, transparent 60%),
+    radial-gradient(40rem 30rem at 100% 20%, #f9e4e4 0%, transparent 55%),
+    linear-gradient(180deg, transparent 60%, #dcebf8 100%);
+  --c-surface-2: #e2edf8;
+  --c-ink: #0f2340;
+  --c-muted: #55698a;
+  --c-accent: #c8102e;
+  --c-accent-soft: rgb(200 16 46 / 0.1);
+  --c-accent-2: #1f7a4d;
+}
+:root.dark[data-holiday='new_year'] {
+  --c-bg: #07142b;
+  --c-bg-art:
+    radial-gradient(60rem 40rem at 20% -10%, #123a6b 0%, transparent 60%),
+    radial-gradient(40rem 30rem at 100% 30%, #3a0f1e 0%, transparent 55%);
+  --c-surface: rgb(12 30 58 / 0.78);
+  --c-surface-2: #0f2648;
+  --c-ink: #eef5ff;
+  --c-muted: #9db3d4;
+  --c-accent: #f5c451;
+  --c-accent-ink: #2a1a00;
+  --c-accent-soft: rgb(245 196 81 / 0.14);
+  --c-accent-2: #ef4444;
+}
+
+:root[data-holiday='birthday'] {
+  --c-bg: #fff7ed;
+  --c-bg-art:
+    radial-gradient(45rem 35rem at 0% 0%, #ffd9ec 0%, transparent 60%),
+    radial-gradient(45rem 35rem at 100% 0%, #fff1a8 0%, transparent 55%),
+    radial-gradient(40rem 30rem at 50% 110%, #c9f2ff 0%, transparent 60%);
+  --c-surface-2: #fff0e0;
+  --c-ink: #2b1530;
+  --c-muted: #7a5f78;
+  --c-accent: #e11d74;
+  --c-accent-soft: rgb(225 29 116 / 0.1);
+  --c-accent-2: #f59e0b;
+}
+:root.dark[data-holiday='birthday'] {
+  --c-bg: #1a0f22;
+  --c-bg-art:
+    radial-gradient(45rem 35rem at 0% 0%, #4a1640 0%, transparent 60%),
+    radial-gradient(45rem 35rem at 100% 0%, #4a3a0c 0%, transparent 55%),
+    radial-gradient(40rem 30rem at 50% 110%, #0d3a4a 0%, transparent 60%);
+  --c-surface: rgb(40 22 48 / 0.8);
+  --c-surface-2: #2c1a35;
+  --c-ink: #fdf0ff;
+  --c-muted: #c6a9c8;
+  --c-accent: #f472b6;
+  --c-accent-ink: #2a0418;
+  --c-accent-soft: rgb(244 114 182 / 0.16);
+  --c-accent-2: #fbbf24;
+}
+
+:root[data-holiday='valentine'] {
+  --f-display: 'Lobster', cursive;
+  --c-bg: #fff1f3;
+  --c-bg-art:
+    radial-gradient(50rem 35rem at 0% 0%, #ffd0d9 0%, transparent 60%),
+    radial-gradient(40rem 30rem at 100% 30%, #ffe4ec 0%, transparent 55%);
+  --c-surface-2: #ffe4e9;
+  --c-ink: #3a0a18;
+  --c-muted: #8a5462;
+  --c-accent: #e11d48;
+  --c-accent-soft: rgb(225 29 72 / 0.1);
+  --c-accent-2: #be185d;
+}
+:root.dark[data-holiday='valentine'] {
+  --c-bg: #1c060d;
+  --c-bg-art:
+    radial-gradient(50rem 35rem at 0% 0%, #5a0f25 0%, transparent 60%),
+    radial-gradient(40rem 30rem at 100% 30%, #3a0a24 0%, transparent 55%);
+  --c-surface: rgb(46 12 24 / 0.8);
+  --c-surface-2: #34101d;
+  --c-ink: #ffeef2;
+  --c-muted: #d39aa8;
+  --c-accent: #fb7185;
+  --c-accent-ink: #2a030d;
+  --c-accent-soft: rgb(251 113 133 / 0.16);
+  --c-accent-2: #f9a8d4;
+}
+
+:root[data-holiday='feb23'] {
+  --f-display: 'Russo One', var(--font-sans);
+  --c-bg: #eef0e6;
+  --c-bg-art:
+    radial-gradient(50rem 35rem at 0% 0%, #d9dfc6 0%, transparent 60%),
+    radial-gradient(40rem 30rem at 100% 20%, #e8dcc4 0%, transparent 55%);
+  --c-surface-2: #e3e7d6;
+  --c-ink: #1b2412;
+  --c-muted: #5f6b4f;
+  --c-accent: #4d6b1a;
+  --c-accent-soft: rgb(77 107 26 / 0.12);
+  --c-accent-2: #b91c1c;
+}
+:root.dark[data-holiday='feb23'] {
+  --c-bg: #10140c;
+  --c-bg-art:
+    radial-gradient(50rem 35rem at 0% 0%, #26321a 0%, transparent 60%),
+    radial-gradient(40rem 30rem at 100% 20%, #3a2a14 0%, transparent 55%);
+  --c-surface: rgb(28 35 21 / 0.82);
+  --c-surface-2: #1f2817;
+  --c-ink: #eef3e4;
+  --c-muted: #a5b38f;
+  --c-accent: #a3c75a;
+  --c-accent-ink: #121a05;
+  --c-accent-soft: rgb(163 199 90 / 0.15);
+  --c-accent-2: #f87171;
+}
+
+:root[data-holiday='march8'] {
+  --f-display: 'Lobster', cursive;
+  --c-bg: #fdf8e6;
+  --c-bg-art:
+    radial-gradient(45rem 35rem at 0% 0%, #fff0a6 0%, transparent 60%),
+    radial-gradient(45rem 35rem at 100% 10%, #ffd6e7 0%, transparent 55%),
+    radial-gradient(40rem 30rem at 50% 110%, #d8f0c8 0%, transparent 60%);
+  --c-surface-2: #fbf1d4;
+  --c-ink: #2b2410;
+  --c-muted: #7a6d4b;
+  --c-accent: #db2777;
+  --c-accent-soft: rgb(219 39 119 / 0.1);
+  --c-accent-2: #65a30d;
+}
+:root.dark[data-holiday='march8'] {
+  --c-bg: #17140b;
+  --c-bg-art:
+    radial-gradient(45rem 35rem at 0% 0%, #3d3510 0%, transparent 60%),
+    radial-gradient(45rem 35rem at 100% 10%, #45122c 0%, transparent 55%),
+    radial-gradient(40rem 30rem at 50% 110%, #1d3512 0%, transparent 60%);
+  --c-surface: rgb(36 31 17 / 0.82);
+  --c-surface-2: #2a2414;
+  --c-ink: #fff8e6;
+  --c-muted: #cbbd94;
+  --c-accent: #f9a8d4;
+  --c-accent-ink: #3a0620;
+  --c-accent-soft: rgb(249 168 212 / 0.15);
+  --c-accent-2: #fde047;
+}
+
+:root[data-holiday='halloween'] {
+  --f-display: 'Rubik Wet Paint', 'Unbounded', var(--font-sans);
+  --c-bg: #fff3e6;
+  --c-bg-art:
+    radial-gradient(45rem 35rem at 0% 0%, #ffd9b0 0%, transparent 60%),
+    radial-gradient(45rem 35rem at 100% 10%, #e8d5ff 0%, transparent 55%);
+  --c-surface-2: #ffe9d2;
+  --c-ink: #24120a;
+  --c-muted: #7c5a44;
+  --c-accent: #ea580c;
+  --c-accent-soft: rgb(234 88 12 / 0.12);
+  --c-accent-2: #7c3aed;
+}
+:root.dark[data-holiday='halloween'] {
+  --c-bg: #0f0816;
+  --c-bg-art:
+    radial-gradient(45rem 35rem at 0% 0%, #3b1a05 0%, transparent 60%),
+    radial-gradient(45rem 35rem at 100% 10%, #2b1050 0%, transparent 55%);
+  --c-surface: rgb(29 17 36 / 0.82);
+  --c-surface-2: #241530;
+  --c-ink: #fff1e4;
+  --c-muted: #c3a58f;
+  --c-accent: #fb923c;
+  --c-accent-ink: #2a1000;
+  --c-accent-soft: rgb(251 146 60 / 0.16);
+  --c-accent-2: #a78bfa;
+}
+
+:root[data-holiday='anniversary'] {
+  --f-display: 'Playfair Display', Georgia, serif;
+  --c-bg: #fbf8f1;
+  --c-bg-art:
+    radial-gradient(50rem 35rem at 0% 0%, #f3e6c4 0%, transparent 60%),
+    radial-gradient(40rem 30rem at 100% 20%, #f6e9e9 0%, transparent 55%);
+  --c-surface-2: #f4eddc;
+  --c-ink: #2a2414;
+  --c-muted: #7d7259;
+  --c-accent: #9a7425;
+  --c-accent-soft: rgb(154 116 37 / 0.12);
+  --c-accent-2: #b4536a;
+}
+:root.dark[data-holiday='anniversary'] {
+  --c-bg: #14110b;
+  --c-bg-art:
+    radial-gradient(50rem 35rem at 0% 0%, #3a2f14 0%, transparent 60%),
+    radial-gradient(40rem 30rem at 100% 20%, #3a1a22 0%, transparent 55%);
+  --c-surface: rgb(33 28 18 / 0.82);
+  --c-surface-2: #282113;
+  --c-ink: #fbf5e6;
+  --c-muted: #c9b98f;
+  --c-accent: #e3c26f;
+  --c-accent-ink: #2a1f00;
+  --c-accent-soft: rgb(227 194 111 / 0.15);
+  --c-accent-2: #f0a3b4;
+}
+
+/* ---------- Global ---------- */
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  color: var(--c-ink);
+  background-color: var(--c-bg);
+  background-image: var(--c-bg-art);
+  background-attachment: fixed;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
+}
+
+.glass {
+  background: var(--c-surface);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+
+/* Floating holiday decorations */
+@keyframes deco-fall {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(var(--drift, 30px), 110vh, 0) rotate(var(--spin, 180deg));
+  }
+}
+@keyframes deco-rise {
+  0% {
+    transform: translate3d(0, 110vh, 0) rotate(-6deg);
+  }
+  50% {
+    transform: translate3d(var(--drift, 30px), 50vh, 0) rotate(6deg);
+  }
+  100% {
+    transform: translate3d(0, -15vh, 0) rotate(-6deg);
+  }
+}
+.deco {
+  position: absolute;
+  top: 0;
+  will-change: transform;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  user-select: none;
+}
+.deco-fall {
+  animation-name: deco-fall;
+}
+.deco-rise {
+  animation-name: deco-rise;
+  animation-timing-function: ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .deco {
+    display: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-pop {
+  animation: pop 0.35s ease;
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.animate-sheet {
+  animation: sheet-in 0.22s ease-out;
+}
