@@ -47,14 +47,20 @@ def make_admin_token() -> str:
     return _serializer.dumps({"admin": True})
 
 
-def require_admin(request: Request) -> None:
+def is_admin(request: Request) -> bool:
     token = request.cookies.get(ADMIN_COOKIE)
     if not token:
-        raise HTTPException(401, "Требуется вход")
+        return False
     try:
         _serializer.loads(token, max_age=ADMIN_MAX_AGE)
     except BadSignature:
-        raise HTTPException(401, "Требуется вход") from None
+        return False
+    return True
+
+
+def require_admin(request: Request) -> None:
+    if not is_admin(request):
+        raise HTTPException(401, "Требуется вход")
 
 
 def valid_device_id(value: str | None) -> bool:

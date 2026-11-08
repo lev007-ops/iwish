@@ -8,7 +8,7 @@ Requirements live in `Промпт для вишлиста.md` (in Russian) and 
 
 Decisions made with the owner, beyond the spec:
 
-- Guests can **reserve** a gift ("я подарю это"). One reservation per gift, and only the device that made it can remove it. Reservations are **hidden from the admin**, so they never appear in the admin API.
+- Guests can **reserve** a gift ("я подарю это"). One reservation per gift, and only the device that made it can remove it. Reservations are **hidden from the admin**, so they never appear in the admin API. On the public page, a request with a valid admin cookie gets `viewer_is_owner: true`, every reservation shows as `"none"`, and reserve/unreserve return 403 before any check, so the status code can't reveal a reservation either.
 - Likes are visible only to the guest who made them. The admin sees only like counts.
 - The public page shows **only the nearest** holiday. With no upcoming holiday, it shows all active gifts.
 - Photos can be uploaded (normalized to WebP plus a `_t` thumbnail in `/data/uploads`) or given as an external URL.

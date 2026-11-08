@@ -6,7 +6,8 @@ import { CheckIcon, ChevronIcon, ExternalIcon, HeartIcon } from './icons'
 interface Props {
   gift: PublicGift
   onLike: (gift: PublicGift) => void
-  onReserve: (gift: PublicGift) => void
+  /** Omitted when the list owner is viewing: no reserve button, no hint. */
+  onReserve?: (gift: PublicGift) => void
   busy: boolean
 }
 
@@ -127,7 +128,7 @@ export function GiftItem({ gift, onLike, onReserve, busy }: Props) {
                   <ExternalIcon size={16} />
                 </a>
               )}
-              {gift.reservation !== 'other' ? (
+              {!onReserve ? null : gift.reservation !== 'other' ? (
                 <button
                   type="button"
                   disabled={busy}
@@ -152,7 +153,7 @@ export function GiftItem({ gift, onLike, onReserve, busy }: Props) {
                 </span>
               )}
             </div>
-            {gift.reservation === 'none' && (
+            {onReserve && gift.reservation === 'none' && (
               <p className="text-xs text-muted">
                 Отметка видна только гостям — чтобы никто не купил то же самое. Хозяин списка её не видит.
               </p>

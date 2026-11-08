@@ -184,5 +184,7 @@ class UploadOut(BaseModel):
 
 class PublicState(BaseModel):
     guest_name: str | None
+    # The list owner (admin cookie) is viewing: reservations are masked and can't be made.
+    viewer_is_owner: bool
     holiday: HolidayPublicOut | None
     gifts: list[GiftPublicOut]

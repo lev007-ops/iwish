@@ -156,9 +156,20 @@ export function PublicPage() {
               ) : (
                 <ul className="space-y-3">
                   {gifts.map((g) => (
-                    <GiftItem key={g.id} gift={g} onLike={onLike} onReserve={onReserve} busy={busy === g.id} />
+                    <GiftItem
+                      key={g.id}
+                      gift={g}
+                      onLike={onLike}
+                      onReserve={state.viewer_is_owner ? undefined : onReserve}
+                      busy={busy === g.id}
+                    />
                   ))}
                 </ul>
+              )}
+              {state.viewer_is_owner && (
+                <p className="mt-4 px-1 text-center text-xs text-muted">
+                  Вы вошли как владелец списка — что выбрали гости, здесь не показывается.
+                </p>
               )}
               {gifts.length > 1 && (
                 <p className="mt-4 px-1 text-center text-xs text-muted">

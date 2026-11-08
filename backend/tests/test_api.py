@@ -105,6 +105,21 @@ def test_reservations(admin):
     assert b.get("/api/public/state").json()["gifts"][0]["reservation"] == "none"
 
 
+def test_reservations_hidden_from_owner_on_public_page(admin):
+    gift = make_gift(admin)
+    guest = TestClient(app)
+    url = f"/api/public/gifts/{gift['id']}/reservation"
+    assert guest.put(url).status_code == 204
+
+    state = admin.get("/api/public/state").json()
+    assert state["viewer_is_owner"] is True
+    assert state["gifts"][0]["reservation"] == "none"
+    # Status codes must not leak the reservation either.
+    assert admin.put(url).status_code == 403
+    assert admin.delete(url).status_code == 403
+    assert guest.get("/api/public/state").json()["viewer_is_owner"] is False
+
+
 def test_personal_link_sets_cookie_and_greets(admin):
     guest = admin.post("/api/admin/guests", json={"name": "Маша"}).json()
     visitor = TestClient(app)

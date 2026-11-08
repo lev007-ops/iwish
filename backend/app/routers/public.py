@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
 
-from ..auth import GUEST_COOKIE, LONG_MAX_AGE, cookie_kwargs
+from ..auth import GUEST_COOKIE, LONG_MAX_AGE, cookie_kwargs, is_admin
 from ..db import get_db
 from ..holidays import upcoming
 from ..models import Device, Gift, Guest, Holiday, Like, Reservation, utcnow
@@ -103,8 +103,11 @@ def public_state(
         db.scalars(select(Like.gift_id).where(Like.device_id == device.id)).all()
     )
 
+    owner = is_admin(request)
+
     def reservation_state(g: Gift) -> str:
-        if g.reservation is None:
+        # Reservations are a secret from the list owner, even on the public page.
+        if owner or g.reservation is None:
             return "none"
         return "mine" if g.reservation.device_id == device.id else "other"
 
@@ -119,7 +122,7 @@ def public_state(
     ]
     # Liked first; within each group keep the desire order (sort is stable).
     out.sort(key=lambda g: not g.liked)
-    return PublicState(guest_name=guest_name, holiday=holiday_out, gifts=out)
+    return PublicState(guest_name=guest_name, viewer_is_owner=owner, holiday=holiday_out, gifts=out)
 
 
 @router.put("/api/public/gifts/{gift_id}/like", status_code=204)
@@ -142,7 +145,15 @@ def unlike(gift_id: int, db: Session = Depends(get_db), device: Device = Depends
 
 
 @router.put("/api/public/gifts/{gift_id}/reservation", status_code=204)
-def reserve(gift_id: int, db: Session = Depends(get_db), device: Device = Depends(get_device)):
+def reserve(
+    gift_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    device: Device = Depends(get_device),
+):
+    # Checked before anything else: a 409 would tell the owner the gift is taken.
+    if is_admin(request):
+        raise HTTPException(403, "Владелец списка не может бронировать подарки")
     _visible_gift(db, gift_id)
     existing = db.get(Reservation, gift_id)
     if existing is not None:
@@ -158,7 +169,15 @@ def reserve(gift_id: int, db: Session = Depends(get_db), device: Device = Depend
 
 
 @router.delete("/api/public/gifts/{gift_id}/reservation", status_code=204)
-def unreserve(gift_id: int, db: Session = Depends(get_db), device: Device = Depends(get_device)):
+def unreserve(
+    gift_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    device: Device = Depends(get_device),
+):
+    # 204-vs-403 would also reveal whether someone reserved the gift.
+    if is_admin(request):
+        raise HTTPException(403, "Владелец списка не может бронировать подарки")
     existing = db.get(Reservation, gift_id)
     if existing is None:
         return

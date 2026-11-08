@@ -38,6 +38,7 @@ export interface PublicHoliday {
 
 export interface PublicState {
   guest_name: string | null
+  viewer_is_owner: boolean
   holiday: PublicHoliday | null
   gifts: PublicGift[]
 }
